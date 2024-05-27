@@ -6,7 +6,7 @@ const itemSchema = new mongoose.Schema({
     discount: Number,
     variants: [
         {
-            name: String,
+            name: { type: String, require: true, unique: true },
             type: [String]
         }
     ],
