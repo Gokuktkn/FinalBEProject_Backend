@@ -12,7 +12,8 @@ const itemSchema = new mongoose.Schema({
     ],
     features: String,
     description: String,
-    img: [String]
+    img: [String],
+    food_type: String
 });
 
 export const itemModel = mongoose.model('item', itemSchema)
