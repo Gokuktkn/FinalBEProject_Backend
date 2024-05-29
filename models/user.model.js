@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
     salt: { type: String, require: true },
     GLOBAL_ID: { type: String, require: true },
     ROLE: {type: String, require: true},
+    profile_picture: String
 });
 
 export const userModel = mongoose.model('user', userSchema)
