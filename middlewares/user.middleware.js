@@ -1,20 +1,41 @@
-// import JWTService from "../utils/jwt.js";
+import Joi from "joi";
 
-// export const createProfileValidator = async (req, res, next) => {
-//     try {
-//         if (!req.headers.authorization) {
-//             throw new Error("Token required")
-//         }
-//         JWTService.verifyToken(req.headers.authorization.split(" ")[1])
-//         if (!req.body) { throw new Error("Information cannot be blank") }
-//         next();
-//     } catch (e) {
-//         next(e)
-//     }
-// }
 class userHandler {
-    registerMiddleware (req, res, next) {
-        next()
+    registerMiddleware = async (req, res, next) => {
+        const { email, username, password, confirmPassword } = req.body;
+        const schema = Joi.object().keys({
+            email: Joi.string()
+                .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+                .required(),
+            username: Joi.string()
+                .alphanum()
+                .min(3)
+                .max(30)
+                .required(),
+
+            password: Joi.string()
+                .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+                .required(),
+
+            confirmPassword: Joi.ref('password'),
+        })
+            .with('password', 'confirmPassword');
+
+        try {
+            await schema.validateAsync({
+                email,
+                username,
+                password,
+                confirmPassword
+            })
+            next()
+        }
+        catch (e) {
+            next(e)
+        }
+    }
+    loginMiddleware(req, res, next) {
+
     }
 }
 const userMiddleware = new userHandler();
