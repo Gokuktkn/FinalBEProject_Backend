@@ -5,6 +5,7 @@ import { config } from 'dotenv'
 
 import databaseService from './service/database.service.js';
 import { userRegister } from './routes/user.route.js';
+import ErrorHandler from './error.handler.js';
 
 const app = express();
 
@@ -14,9 +15,8 @@ app.use(express.json())
 app.use(cors())
 
 app.use('/user', userRegister)
-app.get('/user', (req, res) => {
-    res.send('text')
-})
+
+app.use(ErrorHandler);
 
 
 // ON START
