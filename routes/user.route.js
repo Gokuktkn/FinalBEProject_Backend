@@ -1,8 +1,10 @@
 import { Router } from "express"
 import { config } from "dotenv";
 
-import userController from "../controllers/user.controller.js";
+import { validateRequest } from "../utils/validator.util.js";
 import { imageService } from "../service/image.service.js";
+
+import userController from "../controllers/user.controller.js";
 import userMiddleware from "../middlewares/user.middleware.js";
 
 config();
