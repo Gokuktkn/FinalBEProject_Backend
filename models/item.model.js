@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
 const itemSchema = new mongoose.Schema({
-    itemName: { type: String, require: true },
+    itemName: { type: String, unique: true, require: true },
     price: Number,
     discount: Number,
     variants: [
         {
-            name: { type: String, require: true, unique: true },
+            name: { type: String, require: true },
             type: [String]
         }
     ],

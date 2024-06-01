@@ -1,8 +1,10 @@
 import Joi from "joi";
+import { userModel } from "../models/user.model.js";
+import { itemModel } from "../models/item.model.js"
 
 class userHandler {
     registerMiddleware = async (req, res, next) => {
-        const { email, username, password, confirmPassword } = req.body;
+        const { email, username, password } = req.body;
         const schema = Joi.object().keys({
             email: Joi.string()
                 .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
@@ -15,18 +17,27 @@ class userHandler {
 
             password: Joi.string()
                 .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
-                .required(),
-
-            confirmPassword: Joi.ref('password'),
+                .required()
+                .min(8),
         })
-            .with('password', 'confirmPassword');
 
         try {
+            const existedUser = await userModel.findOne({ email });
+            if (existedUser) {
+                throw (
+                    {
+                        message: "Email đã tồn tại",
+                        statusCode: 403,
+                        stack: "MongoDB conflict"
+                    }
+                )
+            }
+
+
             await schema.validateAsync({
                 email,
                 username,
                 password,
-                confirmPassword
             })
             next()
         }

@@ -1,10 +1,19 @@
 const ErrorHandler = (err, req, res, next) => {
-    let errStatus = err.statusCode || 500;
     let errMsg = err.message || 'Something went wrong';
+    let errStatus = err.statusCode || 500;
 
-    // multer
-    errStatus = err.stack.startsWith('MulterError:') && 400
-    errStatus = err.stack.startsWith('ValidationError:') && 400
+    
+    // custom for mongoose
+    const customError = errMsg.split(' ')
+
+    if(parseInt(customError[0])) {
+        errStatus = parseInt(customError[0])
+    }
+
+    // multer & validator
+    if(err.stack.startsWith('MulterError:') || err.stack.startsWith('ValidationError:')) {
+        errStatus = 400
+    }
 
     res.status(errStatus || 500).json({
         success: false,

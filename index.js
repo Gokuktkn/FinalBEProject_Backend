@@ -13,7 +13,17 @@ const app = express();
 config()
 app.use(express.json())
 app.use(cors())
-
+app.get('/user', (req, res) => {
+    res.status(200).json(
+        {
+            message: 'hello',
+            status: 200,
+            data: {
+                data: 'fake data'
+            }
+        }
+    )
+})
 app.use('/user', userRegister)
 
 app.use(ErrorHandler);
