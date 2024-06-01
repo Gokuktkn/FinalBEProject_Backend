@@ -1,4 +1,6 @@
 import Joi from "joi";
+import { userModel } from "../models/user.model.js";
+import { itemModel } from "../models/item.model.js"
 
 class userHandler {
     registerMiddleware = async (req, res, next) => {
@@ -15,13 +17,26 @@ class userHandler {
 
             password: Joi.string()
                 .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
-                .required(),
+                .required()
+                .min(8),
 
             confirmPassword: Joi.ref('password'),
         })
             .with('password', 'confirmPassword');
 
         try {
+            const existedUser = await userModel.findOne({ email });
+            if (existedUser) {
+                throw (
+                    {
+                        message: "Email đã tồn tại",
+                        statusCode: 403,
+                        stack: "MongoDB conflict"
+                    }
+                )
+            }
+
+
             await schema.validateAsync({
                 email,
                 username,
