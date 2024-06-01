@@ -1,23 +1,31 @@
 import jwt from "jsonwebtoken";
-import { userModel } from "../models/user.model.js";
-import { uuid } from "uuidv4";
+// import { userModel } from "../models/user.model.js";
+// import { uuid } from "uuidv4";
 import { config } from "dotenv";
 config();
 
 
 class tokenHandler {
-  signToken(payload, privateKey) {
-    const token = jwt.sign(payload, privateKey, {
-      expiresIn: "5m",
-      algorithm: "HS256",
-      header: {
-        typ: "jwt"
-      }
-    });
-    if (!token) {
-      return(token);
-    } else {
-      return(token);
+  signToken(payload) {
+    try{
+      const token = jwt.sign(payload, process.env.JWT_PRIVATE_KEY, {
+        expiresIn: "5m",
+        algorithm: "HS256",
+        header: {
+          typ: "jwt"
+        }
+      });
+      console.log(payload.role)
+      return(token)
+    }
+    catch(e) {
+      throw(
+        {
+          message: "Đã có lỗi xảy ra trong quá trình tạo token",
+          status: 500,
+          data: null
+        }
+      )
     }
   };
   verifyToken(token) {
