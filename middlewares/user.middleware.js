@@ -4,7 +4,7 @@ import { itemModel } from "../models/item.model.js"
 
 class userHandler {
     registerMiddleware = async (req, res, next) => {
-        const { email, username, password, confirmPassword } = req.body;
+        const { email, username, password } = req.body;
         const schema = Joi.object().keys({
             email: Joi.string()
                 .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
@@ -19,10 +19,7 @@ class userHandler {
                 .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
                 .required()
                 .min(8),
-
-            confirmPassword: Joi.ref('password'),
         })
-            .with('password', 'confirmPassword');
 
         try {
             const existedUser = await userModel.findOne({ email });
@@ -41,7 +38,6 @@ class userHandler {
                 email,
                 username,
                 password,
-                confirmPassword
             })
             next()
         }
