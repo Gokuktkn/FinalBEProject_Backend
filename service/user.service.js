@@ -9,7 +9,7 @@ class userHandler {
                 username,
                 password,
                 salt,
-                GLOBAL_ID: Date.now(),
+                GLOBAL_ID: Math.ceil((Math.random() * 10) + Date.now()),
                 ROLE: "user",
                 profile_picture: avatar
             })

@@ -18,6 +18,8 @@ class userHandler {
         if (req.file) {
             const avatarData = await cloudinaryService.postAvatar(`${filePath}\\images\\${req.file.filename}`)
             avatar = avatarData.url
+            // delete file after upload to cloudinary
+            fs.unlinkSync(`${filePath}\\images\\${req.file.filename}`)
         }
         else {
             avatar = 'https://res-console.cloudinary.com/diy1mtz8k/media_explorer_thumbnails/dc5f943feaa11cc28078ac3faf9a95ea/detailed'

@@ -1,6 +1,5 @@
 import Joi from "joi";
 import { userModel } from "../models/user.model.js";
-import { itemModel } from "../models/item.model.js"
 
 class userHandler {
     registerMiddleware = async (req, res, next) => {
