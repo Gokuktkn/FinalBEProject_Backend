@@ -17,7 +17,7 @@ class imageHandler {
         catch (e) {
             throw(
                 {
-                    message: "Something is wrong while creating image",
+                    message: e.message || e,
                     status: 500,
                     data: null
                 }

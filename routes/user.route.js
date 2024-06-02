@@ -14,7 +14,7 @@ const userEdit = Router();
 const userDelete = Router();
 
 userRegister.post('/register', imageService.saveSingleImg('avatar'), userMiddleware.registerMiddleware, userController.registerController)
-userLogin.post('/login')
+userLogin.post('/login', userMiddleware.loginMiddleware, userController.loginController)
 userEdit.post('/edit')
 userDelete.post('/delete')
 

@@ -7,7 +7,7 @@ config();
 
 class tokenHandler {
   signToken(payload) {
-    try{
+    try {
       const token = jwt.sign(payload, process.env.JWT_PRIVATE_KEY, {
         expiresIn: "5m",
         algorithm: "HS256",
@@ -15,12 +15,12 @@ class tokenHandler {
           typ: "jwt"
         }
       });
-      return(token)
+      return (token)
     }
-    catch(e) {
-      throw(
+    catch (e) {
+      throw (
         {
-          message: "Đã có lỗi xảy ra trong quá trình tạo token",
+          message: e.message || e,
           status: 500,
           data: null
         }

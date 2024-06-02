@@ -19,7 +19,7 @@ class userHandler {
         catch (e) {
             throw(
                 {
-                    message: e,
+                    message: e.message || e,
                     status: 500,
                     data: null
                 }

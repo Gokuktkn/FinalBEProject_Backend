@@ -11,8 +11,14 @@ class DatabaseService {
     try {
       await mongoose.connect(this.uri);
       console.log(`MongoDB connect successfully`);
-    } catch (error) {
-      throw new Error(error.message);
+    } catch (e) {
+      throw (
+        {
+          message: e.message || e,
+          status: 500,
+          data: null
+        }
+      )
     }
   }
 }

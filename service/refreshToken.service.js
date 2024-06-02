@@ -7,6 +7,7 @@ config();
 class refreshTokenHandler {
     async createNew(token, email) {
         try {
+            const owner = await userModel.findOne({ email })
             const refreshToken = jwt.sign({ token }, process.env.JWT_PRIVATE_KEY, {
                 expiresIn: "7d",
                 algorithm: "HS256",
@@ -14,21 +15,45 @@ class refreshTokenHandler {
                     typ: "jwt"
                 }
             })
-            const owner = await userModel.findOne({ email })
             await tokenModel.create({
                 owner,
                 refreshToken,
             })
             return refreshToken
         } catch (e) {
-            return {
-                message: e,
+            throw {
+                message: e.message || e,
                 status: 500,
                 data: null
             }
         }
     }
-    validate() {
+    async refreshNew(token, email) {
+        try {
+            const owner = await userModel.findOne({ email })
+            const refreshToken = jwt.sign({ token }, process.env.JWT_PRIVATE_KEY, {
+                expiresIn: "7d",
+                algorithm: "HS256",
+                header: {
+                    typ: "jwt"
+                }
+            })
+            const tokenDB = await tokenModel.findOne({ owner })
+            await tokenModel.findOneAndUpdate({ owner }, { refreshToken, __v: tokenDB.__v+1 })
+
+            return refreshToken
+        }
+        catch (e) {
+            throw (
+                {
+                    message: e.message || e,
+                    status: 500,
+                    data: null
+                }
+            )
+        }
+    }
+    async validate() {
 
     }
 }
