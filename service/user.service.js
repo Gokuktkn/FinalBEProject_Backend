@@ -17,8 +17,13 @@ class userHandler {
             return newUser
         }
         catch (e) {
-            console.log(e)
-            throw new Error(e)
+            throw(
+                {
+                    message: e,
+                    status: 500,
+                    data: null
+                }
+            )
         }
     }
 }

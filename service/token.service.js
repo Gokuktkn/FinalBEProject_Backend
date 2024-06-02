@@ -15,7 +15,6 @@ class tokenHandler {
           typ: "jwt"
         }
       });
-      console.log(payload.role)
       return(token)
     }
     catch(e) {

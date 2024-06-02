@@ -1,5 +1,8 @@
+import fs from 'fs'
 import Joi from "joi";
 import { userModel } from "../models/user.model.js";
+
+const filePath = fs.realpathSync('./')
 
 class userHandler {
     registerMiddleware = async (req, res, next) => {
@@ -41,6 +44,8 @@ class userHandler {
             next()
         }
         catch (e) {
+            // delete file if something went wrong
+            fs.unlinkSync(`${filePath}\\images\\${req.file.filename}`)
             next(e)
         }
     }
