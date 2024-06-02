@@ -6,6 +6,7 @@ import { config } from 'dotenv'
 import databaseService from './service/database.service.js';
 import { userDelete, userEditPassword, userEditProfile, userLogin, userRegister } from './routes/user.route.js';
 import ErrorHandler from './error.handler.js';
+import { tokenRequest } from './routes/token.route.js';
 
 const app = express();
 
@@ -29,6 +30,10 @@ app.use('/user', userLogin)
 app.use('/user', userEditProfile)
 app.use('user', userEditPassword)
 app.use('/user', userDelete)
+
+// token
+
+app.use('/token', tokenRequest)
 
 app.use(ErrorHandler);
 

@@ -1,12 +1,7 @@
 import { Router } from "express"
-import { config } from "dotenv";
-
 import { imageService } from "../service/image.service.js";
-
 import userController from "../controllers/user.controller.js";
 import userMiddleware from "../middlewares/user.middleware.js";
-
-config();
 
 const userRegister = Router();
 const userLogin = Router();

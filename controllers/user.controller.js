@@ -62,7 +62,7 @@ class userHandler {
             const { email } = req.body;
             const user = await userModel.findOne({ email })
             const token = tokenService.signToken({ username: user.username, role: user.ROLE, profile_picture: user.profile_picture, id: user.GLOBAL_ID })
-            const refreshToken = await refreshTokenService.refreshNew(token, user.email);
+            const refreshToken = await refreshTokenService.refreshNew(token, user.GLOBAL_ID);
 
             return res.status(200).json({
                 message: "Login Successfully",
