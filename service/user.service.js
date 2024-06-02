@@ -13,13 +13,28 @@ class userHandler {
                 ROLE: "user",
                 profile_picture: avatar
             })
-            
+
             return newUser
         }
         catch (e) {
-            throw(
+            throw (
                 {
                     message: e.message || e,
+                    status: 500,
+                    data: null
+                }
+            )
+        }
+    }
+    async updateUser(user, payload) {
+        try {
+            const updatedUser = await userModel.findOneAndUpdate(user, payload, { new: true })
+            return updatedUser
+        }
+        catch (e) {
+            throw (
+                {
+                    message: e.message,
                     status: 500,
                     data: null
                 }

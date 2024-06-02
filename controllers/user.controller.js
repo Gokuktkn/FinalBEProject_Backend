@@ -12,7 +12,7 @@ import { tokenModel } from '../models/token.model.js';
 const filePath = fs.realpathSync('./')
 
 class userHandler {
-    async registerController(req, res, next) {
+    async register(req, res, next) {
         try {
             const { email, username, password } = req.body;
 
@@ -35,7 +35,7 @@ class userHandler {
             const newUser = await userService.createUser(email, username, newPassword, salt, avatar)
 
             // create token and refresh token with new user as payload
-            const token = tokenService.signToken({ username: newUser.username, role: newUser.ROLE, profile_picture: newUser.profile_picture })
+            const token = tokenService.signToken({ username: newUser.username, role: newUser.ROLE, profile_picture: newUser.profile_picture, id: newUser.GLOBAL_ID })
             const refreshToken = await refreshTokenService.createNew(token, newUser.email);
 
 
@@ -45,7 +45,7 @@ class userHandler {
                 data: {
                     user: {
                         username: newUser.username,
-                        role: "user",
+                        role: newUser.ROLE,
                         profile_picture: newUser.profile_picture,
                     },
                     token,
@@ -57,24 +57,58 @@ class userHandler {
             next(e)
         }
     };
-    async loginController(req, res, next) {
+    async login(req, res, next) {
         try {
             const { email } = req.body;
             const user = await userModel.findOne({ email })
-            const token = tokenService.signToken({ username: user.username, role: user.ROLE, profile_picture: user.profile_picture })
+            const token = tokenService.signToken({ username: user.username, role: user.ROLE, profile_picture: user.profile_picture, id: user.GLOBAL_ID })
             const refreshToken = await refreshTokenService.refreshNew(token, user.email);
-            
+
             return res.status(200).json({
                 message: "Login Successfully",
                 status: 200,
                 data: {
                     user: {
                         username: user.username,
-                        role: "user",
+                        role: user.ROLE,
                         profile_picture: user.profile_picture,
                     },
                     token,
                     refreshToken,
+                },
+            });
+        }
+        catch (e) {
+            next(e)
+        }
+    }
+    async updateProfile(req, res, next) {
+        const { username } = req.body;
+        const token = req.headers.authorization.split(' ')[1]
+        const user = await tokenService.infoToken(token)
+        let avatar;
+
+        try {
+            if (req.file) {
+                const avatarData = await cloudinaryService.postAvatar(`${filePath}\\images\\${req.file.filename}`)
+                fs.unlinkSync(`${filePath}\\images\\${req.file.filename}`)
+                avatar = avatarData.url
+            }
+            else {
+                avatar = false
+            }
+
+
+            const updatedUser = await userService.updateUser(user, { username, profile_picture: avatar ? avatar : user.profile_picture, __v: user.__v + 1 })
+            return res.status(201).json({
+                message: "Update Successfully",
+                status: 201,
+                data: {
+                    user: {
+                        username: updatedUser.username,
+                        role: updatedUser.ROLE,
+                        profile_picture: updatedUser.profile_picture,
+                    }
                 },
             });
         }

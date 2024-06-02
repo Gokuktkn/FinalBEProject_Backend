@@ -10,12 +10,14 @@ config();
 
 const userRegister = Router();
 const userLogin = Router();
-const userEdit = Router();
+const userEditProfile = Router();
+const userEditPassword = Router();
 const userDelete = Router();
 
-userRegister.post('/register', imageService.saveSingleImg('avatar'), userMiddleware.registerMiddleware, userController.registerController)
-userLogin.post('/login', userMiddleware.loginMiddleware, userController.loginController)
-userEdit.post('/edit')
-userDelete.post('/delete')
+userRegister.post('/register', imageService.saveSingleImg('avatar'), userMiddleware.register, userController.register)
+userLogin.post('/login', userMiddleware.login, userController.login)
+userEditProfile.put('/update/profile', imageService.saveSingleImg('avatar'), userMiddleware.updateProfile, userController.updateProfile)
+userEditPassword.put('/update/password')
+userDelete.delete('/delete')
 
-export { userRegister, userLogin, userEdit, userDelete }
+export { userRegister, userLogin, userEditProfile, userEditPassword, userDelete }

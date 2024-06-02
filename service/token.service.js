@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
-// import { userModel } from "../models/user.model.js";
-// import { uuid } from "uuidv4";
+import { userModel } from "../models/user.model.js";
 import { config } from "dotenv";
 config();
 
@@ -28,17 +27,35 @@ class tokenHandler {
     }
   };
   verifyToken(token) {
-    return jwt.verify(token, process.env.JWT_PRIVATE_KEY)
+    try {
+      jwt.verify(token, process.env.JWT_PRIVATE_KEY)
+      return true
+    }
+    catch(e) {
+      throw (
+        {
+          message: "Invalid token",
+          status: 403,
+          data: null
+        }
+      )
+    }
   }
-  // async compareToken(token) {
-  //   const user = await userModel.findOne({ GLOBAL_ID: jwt.decode(token).GLOBAL_ID })
-  //   if (!user) {
-  //     throw new Error("User does not exist")
-  //   }
-  //   else {
-  //     return user
-  //   }
-  // }
+  async infoToken(token) {
+    const user = await userModel.findOne({ GLOBAL_ID: jwt.decode(token).id })
+    if (!user) {
+      throw(
+        {
+          message: "User does not exist",
+          status: 404,
+          data: null
+        }
+      )
+    }
+    else {
+      return user
+    }
+  }
   // async deleteToken(token) {
   //   try {
   //     const user = jwt.decode(token)
