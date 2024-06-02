@@ -7,7 +7,7 @@ class krypto {
         return [hashPassword, salt]
     }
     decrypt(password, salt) {
-        
+        return bcrypt.hashSync(password, salt)
     }
 }
 

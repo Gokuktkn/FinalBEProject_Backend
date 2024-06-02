@@ -4,7 +4,7 @@ import { config } from 'dotenv'
 
 
 import databaseService from './service/database.service.js';
-import { userRegister } from './routes/user.route.js';
+import { userLogin, userRegister } from './routes/user.route.js';
 import ErrorHandler from './error.handler.js';
 
 const app = express();
@@ -25,6 +25,7 @@ app.get('/user', (req, res) => {
     )
 })
 app.use('/user', userRegister)
+app.use('/user', userLogin)
 
 app.use(ErrorHandler);
 

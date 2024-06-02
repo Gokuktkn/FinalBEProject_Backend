@@ -8,14 +8,20 @@ class imageHandler {
                     cb(null, 'images/')
                 },
                 filename: (req, file, cb) => {
-                    cb(null, Date.now() + '.png')
+                    cb(null, Date.now() + '.jpg')
                 }
             })
             const upload = multer({ storage: storage })
             return upload.single('avatar')
         }
         catch (e) {
-            next(400)
+            throw(
+                {
+                    message: e.message || e,
+                    status: 500,
+                    data: null
+                }
+            )
         }
     }
 }

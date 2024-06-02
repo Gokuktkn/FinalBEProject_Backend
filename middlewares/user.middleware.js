@@ -1,6 +1,9 @@
+import fs from 'fs'
 import Joi from "joi";
 import { userModel } from "../models/user.model.js";
-import { itemModel } from "../models/item.model.js"
+import kryptoService from '../utils/hashing.js';
+
+const filePath = fs.realpathSync('./')
 
 class userHandler {
     registerMiddleware = async (req, res, next) => {
@@ -16,9 +19,8 @@ class userHandler {
                 .required(),
 
             password: Joi.string()
-                .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+                .pattern(new RegExp('^[a-zA-Z0-9]{8,30}$'))
                 .required()
-                .min(8),
         })
 
         try {
@@ -42,11 +44,51 @@ class userHandler {
             next()
         }
         catch (e) {
+            // delete file if something went wrong
+            fs.unlinkSync(`${filePath}\\images\\${req.file.filename}`)
             next(e)
         }
     }
-    loginMiddleware(req, res, next) {
+    async loginMiddleware(req, res, next) {
+        const { email, password } = req.body;
+        const schema = Joi.object().keys({
+            email: Joi.string()
+                .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+                .required(),
+            password: Joi.string()
+                .pattern(new RegExp('^[a-zA-Z0-9]{8,30}$'))
+                .required()
+        })
+        try {
+            await schema.validateAsync({
+                email,
+                password,
+            })
+            const existedUser = await userModel.findOne({ email });
+            if (!existedUser) {
+                throw (
+                    {
+                        message: "Sai tài khoản hoặc mật khẩu",
+                        statusCode: 403,
+                        stack: "User input"
+                    }
+                )
+            } else {
+                const decryptedPassword = kryptoService.decrypt(password, existedUser.salt)
+                if(existedUser.password != decryptedPassword) {
+                    throw {
+                        message: "Sai tài khoản hoặc mật khẩu",
+                        statusCode: 403,
+                        stack: "User input"
+                    }
+                }
+            }
 
+            next()
+        }
+        catch (e) {
+            next(e)
+        }
     }
 }
 const userMiddleware = new userHandler();
