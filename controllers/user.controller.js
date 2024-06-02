@@ -100,6 +100,7 @@ class userHandler {
 
 
             const updatedUser = await userService.updateUser(user, { username, profile_picture: avatar ? avatar : user.profile_picture, __v: user.__v + 1 })
+            
             return res.status(201).json({
                 message: "Update Successfully",
                 status: 201,
