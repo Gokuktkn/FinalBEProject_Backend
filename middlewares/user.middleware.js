@@ -47,7 +47,7 @@ class userHandler {
         catch (e) {
             // delete file if something went wrong
             if (req.file) {
-                fs.unlinkSync(`${filePath}\\images\\${req.file.filename}`)
+                fs.unlinkSync(`${filePath}\\images\\avatar\\${req.file.filename}`)
             }
             next(e)
         }
@@ -120,7 +120,7 @@ class userHandler {
         }
         catch (e) {
             if (req.file) {
-                fs.unlinkSync(`${filePath}\\images\\${req.file.filename}`)
+                fs.unlinkSync(`${filePath}\\images\\avatar\\${req.file.filename}`)
             }
             next(e)
         }

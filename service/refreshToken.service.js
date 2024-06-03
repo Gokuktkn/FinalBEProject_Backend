@@ -40,7 +40,7 @@ class refreshTokenHandler {
                     typ: "jwt"
                 }
             })
-            await tokenModel.findOneAndUpdate({ owner }, { refreshToken, used: false, $inc: { __v: 1 }}, { new: true })
+            await tokenModel.findOneAndUpdate({ owner }, { refreshToken, used: false }, { new: true })
 
             return refreshToken
         }
@@ -60,7 +60,7 @@ class refreshTokenHandler {
             const token = jwt.decode(RT).token;
             const owner = await tokenService.infoToken(token)
             const tokenDB = await tokenModel.findOne({ owner })
-            if(!tokenDB || tokenDB.refreshToken != RT) {
+            if (!tokenDB || tokenDB.refreshToken != RT) {
                 throw {
                     message: "Token does not exist or invalid",
                     status: 403,

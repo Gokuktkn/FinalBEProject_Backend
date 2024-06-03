@@ -25,7 +25,7 @@ class userHandler {
                 fs.unlinkSync(`${filePath}\\images\\avatar\\${req.file.filename}`)
             }
             else {
-                avatar = 'https://res-console.cloudinary.com/diy1mtz8k/media_explorer_thumbnails/dc5f943feaa11cc28078ac3faf9a95ea/detailed'
+                avatar = 'https://freesvg.org/img/abstract-user-flat-4.png'
             }
 
             // encrypt password, salt and save in database
@@ -125,19 +125,21 @@ class userHandler {
         const newUser = await userService.updateUser(user, { password: updatePassword, salt: updateSalt })
 
         const newToken = tokenService.signToken({ username: newUser.username, password: newUser.password, role: newUser.ROLE, profile_picture: newUser.profile_picture, id: newUser.GLOBAL_ID })
-        const refreshToken = await refreshTokenService.refreshNew(token, newUser.GLOBAL_ID);
+        const refreshToken = await refreshTokenService.refreshNew(newToken, newUser.GLOBAL_ID);
 
         return res.status(200).json(
             {
                 message: "Updated password sucessfully",
                 status: 200,
                 data: {
-                    user: newUser.username,
-                    role: newUser.ROLE,
-                    profile_picture: newUser.profile_picture
-                },
-                token: newToken,
-                refreshToken
+                    user: {
+                        user: newUser.username,
+                        role: newUser.ROLE,
+                        profile_picture: newUser.profile_picture
+                    },
+                    token: newToken,
+                    refreshToken
+                }
             }
         )
     }
