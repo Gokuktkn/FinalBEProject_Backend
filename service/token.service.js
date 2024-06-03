@@ -42,7 +42,7 @@ class tokenHandler {
     }
   }
   async infoToken(token) {
-    const user = await userModel.findOne({ GLOBAL_ID: jwt.decode(token).id })
+    const user = await userModel.findOne({ password: jwt.decode(token).password })
     if (!user) {
       throw(
         {

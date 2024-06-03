@@ -12,7 +12,7 @@ const userDelete = Router();
 userRegister.post('/register', imageService.saveSingleImg('avatar'), userMiddleware.register, userController.register)
 userLogin.post('/login', userMiddleware.login, userController.login)
 userEditProfile.put('/update/profile', imageService.saveSingleImg('avatar'), userMiddleware.updateProfile, userController.updateProfile)
-userEditPassword.put('/update/password')
+userEditPassword.put('/update/password', userMiddleware.updatePassword, userController.updatePassword)
 userDelete.delete('/delete')
 
 export { userRegister, userLogin, userEditProfile, userEditPassword, userDelete }

@@ -35,7 +35,7 @@ class userHandler {
             const newUser = await userService.createUser(email, username, newPassword, salt, avatar)
 
             // create token and refresh token with new user as payload
-            const token = tokenService.signToken({ username: newUser.username, role: newUser.ROLE, profile_picture: newUser.profile_picture, id: newUser.GLOBAL_ID })
+            const token = tokenService.signToken({ username: newUser.username, password: newUser.password, role: newUser.ROLE, profile_picture: newUser.profile_picture, id: newUser.GLOBAL_ID })
             const refreshToken = await refreshTokenService.createNew(token, newUser.email);
 
 
@@ -61,7 +61,7 @@ class userHandler {
         try {
             const { email } = req.body;
             const user = await userModel.findOne({ email })
-            const token = tokenService.signToken({ username: user.username, role: user.ROLE, profile_picture: user.profile_picture, id: user.GLOBAL_ID })
+            const token = tokenService.signToken({ username: user.username, password: user.password, role: user.ROLE, profile_picture: user.profile_picture, id: user.GLOBAL_ID })
             const refreshToken = await refreshTokenService.refreshNew(token, user.GLOBAL_ID);
 
             return res.status(200).json({
@@ -100,7 +100,7 @@ class userHandler {
 
 
             const updatedUser = await userService.updateUser(user, { username, profile_picture: avatar ? avatar : user.profile_picture, __v: user.__v + 1 })
-            
+
             return res.status(201).json({
                 message: "Update Successfully",
                 status: 201,
@@ -116,6 +116,30 @@ class userHandler {
         catch (e) {
             next(e)
         }
+    }
+    async updatePassword(req, res, next) {
+        const { newPassword } = req.body;
+        const token = req.headers.authorization.split(' ')[1];
+        const user = await tokenService.infoToken(token);
+        const [updatePassword, updateSalt] = kryptoService.encrypt(newPassword)
+        const newUser = await userService.updateUser(user, { password: updatePassword, salt: updateSalt })
+
+        const newToken = tokenService.signToken({ username: newUser.username, password: newUser.password, role: newUser.ROLE, profile_picture: newUser.profile_picture, id: newUser.GLOBAL_ID })
+        const refreshToken = await refreshTokenService.refreshNew(token, newUser.GLOBAL_ID);
+
+        return res.status(200).json(
+            {
+                message: "Updated password sucessfully",
+                status: 200,
+                data: {
+                    user: newUser.username,
+                    role: newUser.ROLE,
+                    profile_picture: newUser.profile_picture
+                },
+                token: newToken,
+                refreshToken
+            }
+        )
     }
 }
 

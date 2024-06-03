@@ -40,8 +40,7 @@ class refreshTokenHandler {
                     typ: "jwt"
                 }
             })
-            const tokenDB = await tokenModel.findOne({ owner })
-            await tokenModel.findOneAndUpdate({ owner }, { refreshToken, __v: tokenDB.__v + 1, used: false }, { new: true })
+            await tokenModel.findOneAndUpdate({ owner }, { refreshToken, used: false, $inc: { __v: 1 }}, { new: true })
 
             return refreshToken
         }

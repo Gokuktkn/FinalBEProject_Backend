@@ -14,6 +14,7 @@ const app = express();
 config()
 app.use(express.json())
 app.use(cors())
+
 app.get('/user', (req, res) => {
     res.status(200).json(
         {
@@ -28,7 +29,7 @@ app.get('/user', (req, res) => {
 app.use('/user', userRegister)
 app.use('/user', userLogin)
 app.use('/user', userEditProfile)
-app.use('user', userEditPassword)
+app.use('/user', userEditPassword)
 app.use('/user', userDelete)
 
 // token

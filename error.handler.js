@@ -1,7 +1,8 @@
 const ErrorHandler = (err, req, res, next) => {
     let errMsg = err.message || 'Something went wrong';
-    let errStatus = err.statusCode || 500;
-    let errStack = err.stack || 'No stack'
+    let errStatus = err.status || 500;
+    let errStack = err.stack || 'No stack';
+    let errData = err.data || null
 
 
     let customError = errMsg.split(' ')
@@ -19,7 +20,8 @@ const ErrorHandler = (err, req, res, next) => {
     res.status(errStatus || 500).json({
         success: false,
         status: errStatus,
-        message: errMsg
+        message: errMsg,
+        data: errData
     })
 }
 
