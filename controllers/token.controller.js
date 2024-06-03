@@ -10,7 +10,7 @@ export const tokenController = async (req, res, next) => {
             );
         }
         const [owner, tokenDB] = await refreshTokenService.Validate(refreshToken);
-        const newToken = tokenService.signToken({ username: owner.username, role: owner.ROLE, profile_picture: owner.profile_picture, id: owner.GLOBAL_ID })
+        const newToken = tokenService.signToken({ username: owner.username, password: owner.password, role: owner.ROLE, profile_picture: owner.profile_picture, id: owner.GLOBAL_ID })
         const newRT = await refreshTokenService.refreshNew(newToken, owner.GLOBAL_ID)
 
         return res.status(200).json(
