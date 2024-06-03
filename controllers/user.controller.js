@@ -19,10 +19,10 @@ class userHandler {
             // avatar creating can be null
             let avatar
             if (req.file) {
-                const avatarData = await cloudinaryService.postAvatar(`${filePath}\\images\\${req.file.filename}`)
+                const avatarData = await cloudinaryService.postAvatar(`${filePath}\\images\\avatar\\${req.file.filename}`)
                 avatar = avatarData.url
                 // delete file after upload to cloudinary
-                fs.unlinkSync(`${filePath}\\images\\${req.file.filename}`)
+                fs.unlinkSync(`${filePath}\\images\\avatar\\${req.file.filename}`)
             }
             else {
                 avatar = 'https://res-console.cloudinary.com/diy1mtz8k/media_explorer_thumbnails/dc5f943feaa11cc28078ac3faf9a95ea/detailed'
@@ -90,8 +90,8 @@ class userHandler {
 
         try {
             if (req.file) {
-                const avatarData = await cloudinaryService.postAvatar(`${filePath}\\images\\${req.file.filename}`)
-                fs.unlinkSync(`${filePath}\\images\\${req.file.filename}`)
+                const avatarData = await cloudinaryService.postAvatar(`${filePath}\\images\\avatar\\${req.file.filename}`)
+                fs.unlinkSync(`${filePath}\\images\\avatar\\${req.file.filename}`)
                 avatar = avatarData.url
             }
             else {

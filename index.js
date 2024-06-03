@@ -1,12 +1,14 @@
 import express from 'express'
 import cors from 'cors'
 import { config } from 'dotenv'
+import bodyParser from 'body-parser';
 
 
 import databaseService from './service/database.service.js';
 import { userDelete, userEditPassword, userEditProfile, userLogin, userRegister } from './routes/user.route.js';
 import ErrorHandler from './error.handler.js';
 import { tokenRequest } from './routes/token.route.js';
+import { postItem } from './routes/item.route.js';
 
 const app = express();
 
@@ -14,6 +16,8 @@ const app = express();
 config()
 app.use(express.json())
 app.use(cors())
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/user', (req, res) => {
     res.status(200).json(
@@ -36,8 +40,12 @@ app.use('/user', userDelete)
 
 app.use('/token', tokenRequest)
 
-app.use(ErrorHandler);
 
+// item
+app.use('/item', postItem)
+
+// Error callback
+app.use(ErrorHandler);
 
 // ON START
 app.listen(process.env.PORT, async (err) => {
