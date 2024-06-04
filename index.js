@@ -5,10 +5,10 @@ import bodyParser from 'body-parser';
 
 
 import databaseService from './service/database.service.js';
-import { userDelete, userEditPassword, userEditProfile, userLogin, userRegister } from './routes/user.route.js';
+import userRouter from './routes/user.route.js';
 import ErrorHandler from './error.handler.js';
-import { tokenRequest } from './routes/token.route.js';
-import { postItem } from './routes/item.route.js';
+import tokenRequest from './routes/token.route.js';
+import itemRouter from './routes/item.route.js';
 
 const app = express();
 
@@ -30,11 +30,9 @@ app.get('/user', (req, res) => {
         }
     )
 })
-app.use('/user', userRegister)
-app.use('/user', userLogin)
-app.use('/user', userEditProfile)
-app.use('/user', userEditPassword)
-app.use('/user', userDelete)
+
+// user
+app.use('/user', userRouter)
 
 // token
 
@@ -42,7 +40,7 @@ app.use('/token', tokenRequest)
 
 
 // item
-app.use('/item', postItem)
+app.use('/item', itemRouter)
 
 // Error callback
 app.use(ErrorHandler);

@@ -3,7 +3,6 @@ import Joi from "joi";
 import { userModel } from "../models/user.model.js";
 import kryptoService from '../utils/hashing.js';
 import tokenService from '../service/token.service.js';
-import userService from '../service/user.service.js';
 
 const filePath = fs.realpathSync('./')
 
@@ -95,7 +94,6 @@ class userHandler {
     }
     async updateProfile(req, res, next) {
         const { username } = req.body
-        console.log(req.file)
         const schema = Joi.object().keys({
             username: Joi.string()
                 .min(3)

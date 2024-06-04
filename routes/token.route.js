@@ -6,4 +6,4 @@ const tokenRequest = Router();
 
 tokenRequest.post('/request', tokenMiddleware, tokenController)
 
-export { tokenRequest }
+export default tokenRequest

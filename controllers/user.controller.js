@@ -85,10 +85,10 @@ class userHandler {
     async updateProfile(req, res, next) {
         const { username } = req.body;
         const token = req.headers.authorization.split(' ')[1]
-        const user = await tokenService.infoToken(token)
         let avatar;
 
         try {
+            const user = await tokenService.infoToken(token)
             if (req.file) {
                 const avatarData = await cloudinaryService.postAvatar(`${filePath}\\images\\avatar\\${req.file.filename}`)
                 fs.unlinkSync(`${filePath}\\images\\avatar\\${req.file.filename}`)
@@ -118,30 +118,35 @@ class userHandler {
         }
     }
     async updatePassword(req, res, next) {
-        const { newPassword } = req.body;
-        const token = req.headers.authorization.split(' ')[1];
-        const user = await tokenService.infoToken(token);
-        const [updatePassword, updateSalt] = kryptoService.encrypt(newPassword)
-        const newUser = await userService.updateUser(user, { password: updatePassword, salt: updateSalt })
+        try {
+            const { newPassword } = req.body;
+            const token = req.headers.authorization.split(' ')[1];
+            const user = await tokenService.infoToken(token);
+            const [updatePassword, updateSalt] = kryptoService.encrypt(newPassword)
+            const newUser = await userService.updateUser(user, { password: updatePassword, salt: updateSalt })
 
-        const newToken = tokenService.signToken({ username: newUser.username, password: newUser.password, role: newUser.ROLE, profile_picture: newUser.profile_picture, id: newUser.GLOBAL_ID })
-        const refreshToken = await refreshTokenService.refreshNew(newToken, newUser.GLOBAL_ID);
+            const newToken = tokenService.signToken({ username: newUser.username, password: newUser.password, role: newUser.ROLE, profile_picture: newUser.profile_picture, id: newUser.GLOBAL_ID })
+            const refreshToken = await refreshTokenService.refreshNew(newToken, newUser.GLOBAL_ID);
 
-        return res.status(200).json(
-            {
-                message: "Updated password sucessfully",
-                status: 200,
-                data: {
-                    user: {
-                        user: newUser.username,
-                        role: newUser.ROLE,
-                        profile_picture: newUser.profile_picture
-                    },
-                    token: newToken,
-                    refreshToken
+            return res.status(200).json(
+                {
+                    message: "Updated password sucessfully",
+                    status: 200,
+                    data: {
+                        user: {
+                            user: newUser.username,
+                            role: newUser.ROLE,
+                            profile_picture: newUser.profile_picture
+                        },
+                        token: newToken,
+                        refreshToken
+                    }
                 }
-            }
-        )
+            )
+        }
+        catch (e) {
+            next(e)
+        }
     }
 }
 

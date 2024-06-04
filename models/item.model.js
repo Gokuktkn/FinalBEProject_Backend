@@ -11,8 +11,8 @@ const itemSchema = new mongoose.Schema({
         }
     ],
     description: String,
-    img: [String],
-    food_type: String
+    images: [String],
+    food_type: { type: String, required: true }
 });
 
 export const itemModel = mongoose.model('item', itemSchema)

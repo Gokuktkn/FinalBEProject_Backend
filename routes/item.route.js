@@ -3,8 +3,8 @@ import { imageService } from "../service/image.service.js";
 import itemMiddleware from "../middlewares/item.middleware.js";
 import itemController from "../controllers/item.controller.js";
 
-const postItem = Router();
+const itemRouter = Router();
 
-postItem.post('/post', imageService.saveMultipleImg('images'), itemMiddleware.createItem, itemController.createItem)
+itemRouter.post('/post', imageService.saveMultipleImg('images'), itemMiddleware.createItem, itemController.createItem)
 
-export { postItem }
+export default itemRouter
