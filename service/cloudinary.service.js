@@ -13,7 +13,7 @@ cloudinary.config(cloudinaryConfig);
 
 
 class imageHandler {
-    async postAvatar(filePath) {
+    async postSingleImage(filePath) {
         return await cloudinary.uploader.upload(filePath, { public_id: Date.now() }, (err, res) => {
             if(err) {
                 fs.unlinkSync(filePath)
