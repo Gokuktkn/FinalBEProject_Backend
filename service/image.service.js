@@ -1,19 +1,18 @@
 import multer from 'multer';
-import * as crypto from 'crypto'
 
 class imageHandler {
-    saveSingleImg() {
+    saveSingleImg(path) {
         try {
             const storage = multer.diskStorage({
                 destination: (req, file, cb) => {
-                    cb(null, 'images/avatar/')
+                    cb(null, `images/${path}/`)
                 },
                 filename: (req, file, cb) => {
                     cb(null, (Math.ceil(Math.random() * Date.now())) + (Math.ceil(Math.random() * Date.now())) + '.jpg')
                 }
             })
             const upload = multer({ storage: storage })
-            return upload.single('avatar')
+            return upload.single(path)
         }
         catch (e) {
             throw (
@@ -25,18 +24,17 @@ class imageHandler {
             )
         }
     }
-    saveMultipleImg() {
+    saveMultipleImg(path) {
         try {
-            const randomString = crypto.randomBytes(8).toString('hex');
             const storage = multer.diskStorage({
                 destination: (req, file, cb) => {
-                    cb(null, 'images/items/')
+                    cb(null, `images/${path}/`)
                 },
                 filename: (req, file, cb) => {
                     cb(null, (Math.ceil(Math.random() * Date.now())) + (Math.ceil(Math.random() * Date.now())) + '.jpg')
                 }
             })
-            const upload = multer({ storage: storage }).array('images');
+            const upload = multer({ storage: storage }).array(path);
             return upload
         }
         catch (e) {

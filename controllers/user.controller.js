@@ -19,7 +19,7 @@ class userHandler {
             // avatar creating can be null
             let avatar
             if (req.file) {
-                const avatarData = await cloudinaryService.postAvatar(`${filePath}\\images\\avatar\\${req.file.filename}`)
+                const avatarData = await cloudinaryService.postSingleImage(`${filePath}\\images\\avatar\\${req.file.filename}`)
                 avatar = avatarData.url
                 // delete file after upload to cloudinary
                 fs.unlinkSync(`${filePath}\\images\\avatar\\${req.file.filename}`)
@@ -40,6 +40,7 @@ class userHandler {
 
 
             return res.status(201).json({
+                success: true,
                 message: "Register Successfully",
                 status: 201,
                 data: {
@@ -65,6 +66,7 @@ class userHandler {
             const refreshToken = await refreshTokenService.refreshNew(token, user.GLOBAL_ID);
 
             return res.status(200).json({
+                success: true,
                 message: "Login Successfully",
                 status: 200,
                 data: {
@@ -90,7 +92,7 @@ class userHandler {
         try {
             const user = await tokenService.infoToken(token)
             if (req.file) {
-                const avatarData = await cloudinaryService.postAvatar(`${filePath}\\images\\avatar\\${req.file.filename}`)
+                const avatarData = await cloudinaryService.postSingleImage(`${filePath}\\images\\avatar\\${req.file.filename}`)
                 fs.unlinkSync(`${filePath}\\images\\avatar\\${req.file.filename}`)
                 avatar = avatarData.url
             }
@@ -102,6 +104,7 @@ class userHandler {
             const updatedUser = await userService.updateUser(user, { username, profile_picture: avatar ? avatar : user.profile_picture, __v: user.__v + 1 })
 
             return res.status(201).json({
+                success: true,
                 message: "Update Successfully",
                 status: 201,
                 data: {
@@ -130,6 +133,7 @@ class userHandler {
 
             return res.status(200).json(
                 {
+                    success: true,
                     message: "Updated password sucessfully",
                     status: 200,
                     data: {

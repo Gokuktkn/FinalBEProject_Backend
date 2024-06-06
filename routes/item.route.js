@@ -5,6 +5,6 @@ import itemController from "../controllers/item.controller.js";
 
 const itemRouter = Router();
 
-itemRouter.post('/post', imageService.saveMultipleImg('images'), itemMiddleware.createItem, itemController.createItem)
+itemRouter.post('/post', imageService.saveMultipleImg('items'), itemMiddleware.createItem, itemController.createItem)
 
 export default itemRouter
