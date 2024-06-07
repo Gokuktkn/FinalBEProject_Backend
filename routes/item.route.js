@@ -9,7 +9,7 @@ const itemRouter = Router();
 
 itemRouter.get('/get-all', itemController.getAllItems) // done
 itemRouter.get('/get-type/:type', itemController.getItemType) // done
-itemRouter.get('/get-item/', itemController.getItem) // done
+itemRouter.get('/get-item', itemController.getItem) // done
 itemRouter.post('/create', imageService.saveMultipleImg('items'), itemMiddleware.createItem, itemController.createItem) //done
 itemRouter.put('/update/:name') // pending
 itemRouter.delete('/delete/:name') // pending
