@@ -19,10 +19,10 @@ class userHandler {
             // avatar creating can be null
             let avatar
             if (req.file) {
-                const avatarData = await cloudinaryService.postSingleImage(`${filePath}\\images\\avatar\\${req.file.filename}`)
+                const avatarData = await cloudinaryService.postSingleImage(`${filePath}\\${req.file.path}`, 'avatar')
                 avatar = avatarData.url
                 // delete file after upload to cloudinary
-                fs.unlinkSync(`${filePath}\\images\\avatar\\${req.file.filename}`)
+                fs.unlinkSync(`${filePath}\\${req.file.path}`)
             }
             else {
                 avatar = 'https://freesvg.org/img/abstract-user-flat-4.png'
@@ -92,8 +92,8 @@ class userHandler {
         try {
             const user = await tokenService.infoToken(token)
             if (req.file) {
-                const avatarData = await cloudinaryService.postSingleImage(`${filePath}\\images\\avatar\\${req.file.filename}`)
-                fs.unlinkSync(`${filePath}\\images\\avatar\\${req.file.filename}`)
+                const avatarData = await cloudinaryService.postSingleImage(`${filePath}\\${req.file.path}`, avatar)
+                fs.unlinkSync(`${filePath}\\${req.file.path}`)
                 avatar = avatarData.url
             }
             else {
