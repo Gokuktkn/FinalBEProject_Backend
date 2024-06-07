@@ -1,5 +1,6 @@
 import { itemModel } from "../models/item.model.js";
 import cloudinaryService from "../service/cloudinary.service.js";
+import { convertTagsToHtml } from "../utils/regex.js";
 import fs from 'fs';
 
 const filePath = fs.realpathSync('./');
@@ -88,12 +89,14 @@ class itemHandler {
 
             const ID = await itemModel.countDocuments();
 
+            const newDescription = convertTagsToHtml(description, data.map(e => e.url))
+
             const newItem = await itemModel.create({
                 itemName,
                 price,
                 discount,
                 variants: JSON.parse(variants),
-                description,
+                description : newDescription,
                 images: data.map(e => e.url),
                 food_type,
                 ID: ID + 1,
