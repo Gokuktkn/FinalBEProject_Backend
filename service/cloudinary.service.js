@@ -13,11 +13,11 @@ cloudinary.config(cloudinaryConfig);
 
 
 class imageHandler {
-    async postSingleImage(filePath) {
-        return await cloudinary.uploader.upload(filePath, { public_id: Date.now() }, (err, res) => {
-            if(err) {
+    async postSingleImage(filePath, folder) {
+        return await cloudinary.uploader.upload(filePath, { public_id: Math.ceil(Math.random() * Date.now() + Math.random() * Date.now()), folder }, (err, res) => {
+            if (err) {
                 fs.unlinkSync(filePath)
-                throw(
+                throw (
                     {
                         message: err.message || err,
                         status: 500,
@@ -26,6 +26,27 @@ class imageHandler {
                 )
             }
         })
+    }
+
+    async postMultipleImages(imagesPath, folder) {
+        let result = [];
+        for (const image in imagesPath) {
+            const response = await cloudinary.uploader.upload(imagesPath[image], { public_id: Math.ceil(Math.random() * Date.now() + Math.random() * Date.now()), folder }, ((err, res) => {
+                if (err) {
+                    result.map(e => fs.unlinkSync(e))
+                    throw (
+                        {
+                            message: err.message || err,
+                            status: 500,
+                            data: null
+                        }
+                    )
+                }
+            }));
+            result.push(response)
+        }
+        return result;
+
     }
 }
 const cloudinaryService = new imageHandler();

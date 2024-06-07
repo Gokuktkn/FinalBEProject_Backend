@@ -7,12 +7,14 @@ const itemSchema = new mongoose.Schema({
     variants: [
         {
             name: { type: String, require: true },
-            type: [String]
+            type: []
         }
     ],
     description: String,
-    images: [String],
-    food_type: { type: String, required: true }
+    images: { type: Array, require: true },
+    food_type: { type: String, required: true },
+    ID: { type: Number, require: true },
+    deleted: { type: Boolean, require: true }
 });
 
 export const itemModel = mongoose.model('item', itemSchema)
