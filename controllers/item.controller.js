@@ -7,6 +7,7 @@ const filePath = fs.realpathSync('./');
 
 class itemHandler {
     async getAllItems(req, res, next) {
+        const page = req.params.p;
         try {
             const allItems = await itemModel.find({ deleted: false })
             if (allItems.length === 0) {
@@ -16,11 +17,15 @@ class itemHandler {
                     data: null
                 })
             }
+            const pageCount = Math.ceil(allItems.length / 8);
+            if (page > pageCount) {
+                page = pageCount
+            }
             res.status(200).json({
                 message: "Successfully",
                 status: 200,
                 data: {
-                    items: allItems
+                    items: allItems.slice(0, page * 8)
                 }
             })
         }
@@ -29,8 +34,9 @@ class itemHandler {
         }
     }
     async getItemType(req, res, next) {
+        const page = parseInt(req.params.p);
+        const type = req.params.type;
         try {
-            const type = req.params.type;
             const items = await itemModel.find({ food_type: type, deleted: false })
             if (items.length === 0) {
                 res.status(404).json({
@@ -39,11 +45,18 @@ class itemHandler {
                     data: null
                 })
             }
+
+            const pageCount = Math.ceil(items.length / 8);
+            if (page > pageCount) {
+                page = pageCount
+            }
+
+
             res.status(200).json({
                 message: "Successfully",
                 status: 200,
                 data: {
-                    items,
+                    items: page ? items.slice(0, page * 8) : items,
                 }
             })
         }
@@ -96,7 +109,7 @@ class itemHandler {
                 price,
                 discount,
                 variants: JSON.parse(variants),
-                description : newDescription,
+                description: newDescription,
                 images: data.map(e => e.url),
                 food_type,
                 ID: ID + 1,
