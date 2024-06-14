@@ -66,12 +66,36 @@ class itemHandler {
     }
     async getItem(req, res, next) {
         try {
-            const name = req.query.name;
+            const id = req.params.id;
+            const item = await itemModel.findOne({ ID: id, deleted: false })
+            if (!item) {
+                res.status(404).json({
+                    message: "Item not found",
+                    status: 404,
+                    data: null
+                })
+            }
+            res.status(200).json({
+                message: "Successfully get an item",
+                status: 200,
+                data: {
+                    item
+                }
+            })
+        }
+        catch (e) {
+            next(e)
+        }
+    }
+    async searchItem(req, res, next) {
+        try {
+            const name = req.params.name;
             const items = await itemModel.find({
                 itemName: {
                     $regex: name,
                     $options: 'i'
-                }
+                },
+                deleted: false
             })
             if (items.length === 0) {
                 res.status(404).json({
@@ -80,13 +104,15 @@ class itemHandler {
                     data: null
                 })
             }
-            res.status(200).json({
-                message: "Successfully",
-                status: 200,
-                data: {
-                    items,
-                }
-            })
+            else {
+                res.status(200).json({
+                    message: "Successfully",
+                    status: 200,
+                    data: {
+                        items,
+                    }
+                })
+            }
         }
         catch (e) {
             next(e)

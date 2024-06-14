@@ -9,6 +9,7 @@ import userRouter from './routes/user.route.js';
 import ErrorHandler from './error.handler.js';
 import tokenRequest from './routes/token.route.js';
 import itemRouter from './routes/item.route.js';
+import billingRoute from './routes/billing.route.js';
 
 const app = express();
 
@@ -41,6 +42,9 @@ app.use('/token', tokenRequest)
 
 // item
 app.use('/item', itemRouter)
+
+// billing
+app.use('/checkout', billingRoute)
 
 // Error callback
 app.use(ErrorHandler);

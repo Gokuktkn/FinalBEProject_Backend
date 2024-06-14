@@ -10,7 +10,8 @@ const itemRouter = Router();
 itemRouter.get('/get-all/:p', itemController.getAllItems) // done
 itemRouter.get('/get-type/:type', itemController.getItemType) // done
 itemRouter.get('/get-type/:type/:p', itemController.getItemType) // done
-itemRouter.get('/get-item/:name', itemController.getItem) // done
+itemRouter.get('/search-item/:name', itemController.searchItem) // done
+itemRouter.get('/get-item/:id', itemController.getItem) // done
 itemRouter.post('/create', imageService.saveMultipleImg('items'), itemMiddleware.createItem, itemController.createItem) //done
 itemRouter.put('/update/:name') // pending
 itemRouter.delete('/delete/:name') // pending

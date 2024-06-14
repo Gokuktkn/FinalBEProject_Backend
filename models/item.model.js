@@ -4,12 +4,7 @@ const itemSchema = new mongoose.Schema({
     itemName: { type: String, require: true },
     price: { type: Number, require: true },
     discount: { type: Number, require: true },
-    variants: [
-        {
-            name: { type: String, require: true },
-            type: []
-        }
-    ],
+    variants: [],
     description: String,
     images: { type: Array, require: true },
     food_type: { type: String, required: true },
