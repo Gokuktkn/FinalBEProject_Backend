@@ -160,6 +160,36 @@ class userHandler {
             next(e)
         }
     }
+    async deleteUser(req, res, next) {
+        const { password } = req.body;
+        try {
+            if (!req.headers.authorization) {
+                throw (
+                    { message: 'No credentials sent!', status: 403, data: null }
+                );
+            }
+            const token = req.headers.authorization.split(' ')[1];
+
+            tokenService.verifyToken(token);
+
+            const user = await tokenService.infoToken(token);
+
+            const decryptedPassword = kryptoService.decrypt(password, user.salt)
+
+            if (user.password != decryptedPassword) {
+                throw {
+                    message: "Sai mật khẩu",
+                    statusCode: 403,
+                    data: null
+                }
+            }
+
+            next()
+        }
+        catch (e) {
+            next(e)
+        }
+    }
 }
 const userMiddleware = new userHandler();
 export default userMiddleware;

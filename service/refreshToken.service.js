@@ -77,6 +77,39 @@ class refreshTokenHandler {
             }
         }
     }
+    async deleteRefreshToken(token) {
+        try {
+            const user = await userModel.findOne({ email: jwt.decode(token).email });
+            if (!user) {
+                throw (
+                    {
+                        message: "User does not exist",
+                        status: 404,
+                        data: null
+                    }
+                )
+            }
+            const deletedToken = await tokenModel.findOneAndDelete({ owner: user._id });
+            if (!deletedToken) {
+                throw {
+                    message: 'User not found',
+                    status: 404,
+                    data: null
+                };
+            }
+            return {
+                message: 'User successfully deleted',
+                status: 200,
+                data: deletedToken
+            };
+        } catch (e) {
+            throw {
+                message: e.message || e,
+                status: 500,
+                data: null
+            }
+        }
+    }
 }
 
 const refreshTokenService = new refreshTokenHandler();
