@@ -172,7 +172,7 @@ class userHandler {
 
             tokenService.verifyToken(token);
 
-            const user = await tokenService.infoToken(token);
+            const user = await tokenService.infoTokenTest(token);
 
             const decryptedPassword = kryptoService.decrypt(password, user.salt)
 

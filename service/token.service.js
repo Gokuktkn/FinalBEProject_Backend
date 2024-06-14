@@ -31,7 +31,7 @@ class tokenHandler {
       jwt.verify(token, process.env.JWT_PRIVATE_KEY)
       return true
     }
-    catch(e) {
+    catch (e) {
       throw (
         {
           message: "Invalid token",
@@ -44,7 +44,7 @@ class tokenHandler {
   async infoToken(token) {
     const user = await userModel.findOne({ password: jwt.decode(token).password })
     if (!user) {
-      throw(
+      throw (
         {
           message: "User does not exist",
           status: 404,
@@ -54,6 +54,20 @@ class tokenHandler {
     }
     else {
       return user
+    }
+  }
+  async infoTokenTest(token) {
+    const user = await userModel.findOne({ GLOBAL_ID: jwt.decode(token).id });
+    if (!user) {
+      throw (
+        {
+          message: "User does not exist",
+          status: 404,
+          data: null
+        }
+      )
+    } else {
+      return user;
     }
   }
   // async deleteToken(token) {

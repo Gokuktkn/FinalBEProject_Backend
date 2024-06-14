@@ -79,7 +79,7 @@ class refreshTokenHandler {
     }
     async deleteRefreshToken(token) {
         try {
-            const user = await userModel.findOne({ email: jwt.decode(token).email });
+            const user = await userModel.findOne({ GLOBAL_ID: jwt.decode(token).id });
             if (!user) {
                 throw (
                     {

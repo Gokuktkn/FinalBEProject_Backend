@@ -134,7 +134,7 @@ class userHandler {
             return res.status(200).json(
                 {
                     success: true,
-                    message: "Updated password sucessfully",
+                    message: "Updated password successfully",
                     status: 200,
                     data: {
                         user: {
@@ -155,9 +155,9 @@ class userHandler {
     async deleteUser(req, res, next) {
         const token = req.headers.authorization.split(' ')[1];
         try {
-            const user = await tokenService.infoToken(token);
-            const deletedUser = await userService.deleteUser(user);
+            const user = await tokenService.infoTokenTest(token);
             const deleteToken = await refreshTokenService.deleteRefreshToken(token);
+            const deletedUser = await userService.deleteUser(user);
             return res.status(201).json({
                 success: true,
                 message: "Delete Successfully",
