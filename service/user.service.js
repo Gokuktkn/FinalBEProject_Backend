@@ -41,6 +41,30 @@ class userHandler {
             )
         }
     }
+    async deleteUser(user) {
+        try {
+            const deletedUser = await userModel.findOneAndDelete(user);
+            if (!deletedUser) {
+                throw {
+                    message: 'User not found',
+                    status: 404,
+                    data: null
+                };
+            }
+            return {
+                message: 'User successfully deleted',
+                status: 200,
+                data: deletedUser
+            };
+        } catch (e) {
+            throw {
+                message: e.message,
+                status: 500,
+                data: null
+            };
+        }
+    }
+    
 }
 
 const userService = new userHandler();

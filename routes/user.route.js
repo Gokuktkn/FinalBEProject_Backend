@@ -9,6 +9,6 @@ userRouter.post('/register', imageService.saveSingleImg('avatar'), userMiddlewar
 userRouter.post('/login', userMiddleware.login, userController.login)
 userRouter.put('/update/profile', imageService.saveSingleImg('avatar'), userMiddleware.updateProfile, userController.updateProfile)
 userRouter.put('/update/password', userMiddleware.updatePassword, userController.updatePassword)
-userRouter.delete('/delete')
+userRouter.delete('/delete', userMiddleware.deleteUser, userController.deleteUser)
 
 export default userRouter
