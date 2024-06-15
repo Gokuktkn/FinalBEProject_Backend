@@ -177,11 +177,11 @@ class userHandler {
             const decryptedPassword = kryptoService.decrypt(password, user.salt)
 
             if (user.password != decryptedPassword) {
-                throw {
+                throw ({
                     message: "Sai mật khẩu",
                     statusCode: 403,
                     data: null
-                }
+                })
             }
 
             next()

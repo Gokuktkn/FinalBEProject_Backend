@@ -45,11 +45,11 @@ class userHandler {
         try {
             const deletedUser = await userModel.findOneAndDelete(user);
             if (!deletedUser) {
-                throw {
+                throw ({
                     message: 'User not found',
                     status: 404,
                     data: null
-                };
+                });
             }
             return {
                 message: 'User successfully deleted',
@@ -57,11 +57,11 @@ class userHandler {
                 data: deletedUser
             };
         } catch (e) {
-            throw {
+            throw ({
                 message: e.message,
                 status: 500,
                 data: null
-            };
+            });
         }
     }
     
