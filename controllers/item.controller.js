@@ -7,7 +7,7 @@ const filePath = fs.realpathSync('./');
 
 class itemHandler {
     async getAllItems(req, res, next) {
-        const page = req.params.p;
+        const page = parseInt(req.params.p);
         try {
             const allItems = await itemModel.find({ deleted: false })
             if (allItems.length === 0) {
@@ -153,9 +153,47 @@ class itemHandler {
                         variants: newItem.variants,
                         description: newItem.description,
                         images: newItem.images,
-                        food_type: newItem.food_type
+                        food_type: newItem.food_type,
+                        ID: newItem.ID
                     }
                 }
+            })
+        }
+        catch (e) {
+            next(e)
+        }
+    }
+    async updateItem(req, res, next) {
+        const ID = req.params.id;
+        const { itemName, price, description } = req.body;
+
+        const newItem = await itemModel.findOneAndUpdate({ ID }, { itemName, price, description })
+
+        res.status(201).json({
+            message: "Updated successfully",
+            status: 201,
+            data: {
+                item: {
+                    itemName: newItem.itemName,
+                    price: newItem.price,
+                    discount: newItem.discount,
+                    variants: newItem.variants,
+                    description: newItem.description,
+                    images: newItem.images,
+                    food_type: newItem.food_type,
+                    ID: newItem.ID
+                }
+            }
+        })
+    }
+    async deleteItem(req, res, next) {
+        try {
+            const ID = req.params.id;
+            await itemModel.findOneAndUpdate({ ID }, { deleted: true })
+            res.status(202).json({
+                message: "Deleted successfully",
+                status: 202,
+                data: null
             })
         }
         catch (e) {

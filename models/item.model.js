@@ -8,7 +8,7 @@ const itemSchema = new mongoose.Schema({
     description: String,
     images: { type: Array, require: true },
     food_type: { type: String, required: true },
-    ID: { type: Number, require: true },
+    ID: { type: Number, require: true, unique: true },
     deleted: { type: Boolean, require: true }
 });
 

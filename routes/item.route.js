@@ -13,7 +13,7 @@ itemRouter.get('/get-type/:type/:p', itemController.getItemType) // done
 itemRouter.get('/search-item/:name', itemController.searchItem) // done
 itemRouter.get('/get-item/:id', itemController.getItem) // done
 itemRouter.post('/create', imageService.saveMultipleImg('items'), itemMiddleware.createItem, itemController.createItem) //done
-itemRouter.put('/update/:name') // pending
-itemRouter.delete('/delete/:name') // pending
+itemRouter.put('/update/:id', itemMiddleware.updateItem, itemController.updateItem) //pending
+itemRouter.delete('/delete/:id', itemMiddleware.deleteItem, itemController.deleteItem) // pending
 
 export default itemRouter
