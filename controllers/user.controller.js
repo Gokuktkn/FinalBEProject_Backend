@@ -158,9 +158,8 @@ class userHandler {
             await refreshTokenService.deleteRefreshToken(token);
             const user = await tokenService.infoToken(token);
             
-            await userService.deleteUser(user);
+            await userModel.findOneAndDelete(user)
             return res.status(201).json({
-                success: true,
                 message: "Delete Successfully",
                 status: 201,
                 data: null,

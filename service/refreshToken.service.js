@@ -89,19 +89,7 @@ class refreshTokenHandler {
                     }
                 )
             }
-            const deletedToken = await tokenModel.findOneAndDelete({ owner: user });
-            if (!deletedToken) {
-                throw ({
-                    message: 'User not found',
-                    status: 404,
-                    data: null
-                });
-            }
-            return {
-                message: 'User successfully deleted',
-                status: 200,
-                data: deletedToken
-            };
+            return await tokenModel.findOneAndDelete({ owner: user });
         } catch (e) {
             throw ({
                 message: e.message || e,
