@@ -79,7 +79,7 @@ class refreshTokenHandler {
     }
     async deleteRefreshToken(token) {
         try {
-            const user = await userModel.findOne({ email: jwt.decode(token).email });
+            const user = await userModel.findOne({ password: jwt.decode(token).password });
             if (!user) {
                 throw (
                     {
@@ -89,7 +89,7 @@ class refreshTokenHandler {
                     }
                 )
             }
-            const deletedToken = await tokenModel.findOneAndDelete({ owner: user._id });
+            const deletedToken = await tokenModel.findOneAndDelete({ owner: user });
             if (!deletedToken) {
                 throw ({
                     message: 'User not found',
