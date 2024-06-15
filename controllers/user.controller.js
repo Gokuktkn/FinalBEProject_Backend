@@ -155,9 +155,9 @@ class userHandler {
     async deleteUser(req, res, next) {
         const token = req.headers.authorization.split(' ')[1];
         try {
-            await refreshTokenService.deleteRefreshToken(token);
             const user = await tokenService.infoToken(token);
-            
+
+            await refreshTokenService.deleteRefreshToken(token);
             await userModel.findOneAndDelete(user)
             return res.status(201).json({
                 message: "Delete Successfully",
